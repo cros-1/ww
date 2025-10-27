@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة التحكم</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body id="admin">
+  <div id="loader"><div class="orb"></div></div>
+
+  <div class="topbar">
+    <a class="brand3d shine" href="./">قطاع عمليات وسط الرياض</a>
+    <div class="grow"></div>
+    <button id="themeBtn" class="mode" title="تبديل النمط">🌙</button>
+    <a class="chip active" href="admin.html">لوحة التحكم</a>
+  </div>
+
+  <div id="gate" class="gate">
+    <div class="gate-box">
+      <div class="gate-title">أدخل كلمة المرور</div>
+      <input id="pwd" type="password" class="inp" placeholder="••••••••" />
+      <div class="row">
+        <button class="chip" onclick="login()">دخول</button>
+        <button class="chip" onclick="document.getElementById('pwd').value=''">إلغاء</button>
+      </div>
+      <div id="msg" class="msg-err">كلمة المرور غير صحيحة</div>
+    </div>
+  </div>
+
+  <main id="content" class="wrap" style="display:none">
+    <nav class="tabs">
+      <button class="tab active" data-tab="setup">الإعدادات العامة</button>
+      <button class="tab" data-tab="ads">الإعلانات</button>
+      <button class="tab" data-tab="honor">لوحات الشرف</button>
+      <button class="tab" data-tab="links">الروابط</button>
+      <button class="tab" data-tab="theme">المظهر والألوان</button>
+    </nav>
+
+    <section id="tab-setup" class="card tab-pane">
+      <div class="grid2">
+        <div>
+          <label class="lbl-small">رابط Google Apps Script (googleusercontent)</label>
+          <input id="cfgScript" class="inp" placeholder="https://script.googleusercontent.com/..." />
+        </div>
+        <div>
+          <label class="lbl-small">كلمة مرور لوحة التحكم</label>
+          <input id="cfgPass" class="inp" placeholder="admin3838771" />
+        </div>
+      </div>
+      <div class="row">
+        <button class="chip" onclick="saveConfig()">حفظ الإعدادات</button>
+        <button class="chip" onclick="resetSetup()">إعادة الإعداد الأولي</button>
+      </div>
+      <div class="meta small">* تُحفظ أيضًا في Google Sheet ليطبّق على الجميع.</div>
+    </section>
+
+    <section id="tab-ads" class="card tab-pane hidden">
+      <h3 class="sec-title">إدارة الإعلانات</h3>
+      <div class="row">
+        <input id="adTitle" class="inp" placeholder="عنوان (اختياري)" />
+        <textarea id="adText" class="inp" rows="3" placeholder="نص الإعلان..."></textarea>
+        <button class="chip" onclick="sendAd()">نشر الإعلان</button>
+      </div>
+      <div id="adsTable" class="table mt"></div>
+    </section>
+
+    <section id="tab-honor" class="card tab-pane hidden">
+      <div class="row wrap-row">
+        <div class="flex">
+          <label class="lbl-small">التبويب الحالي</label>
+          <select id="honorCategory" class="inp"></select>
+        </div>
+        <div class="flex">
+          <label class="lbl-small">إضافة تبويب جديد</label>
+          <div class="row">
+            <input id="newCatName" class="inp" placeholder="مثال: أفضل عمليات" />
+            <select id="newCatBadge" class="inp">
+              <option value="shield">🛡 درع</option>
+              <option value="medal">🥇 ميدالية</option>
+              <option value="crown">👑 تاج</option>
+              <option value="star">💎 نجمة</option>
+              <option value="trophy">🏆 كأس</option>
+              <option value="timer">🕒 ساعة</option>
+            </select>
+            <button class="chip" onclick="addCategory()">إضافة</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="chip" onclick="clearCategory()">مسح محتوى التبويب</button>
+        <button class="chip" onclick="deleteCategory()">حذف التبويب</button>
+      </div>
+
+      <hr class="sep"/>
+
+      <div class="grid2">
+        <div>
+          <label class="lbl-small">المسمّى (عنوان اللوحة)</label>
+          <input id="team" class="inp" placeholder="مثال: أفضل فرقة" />
+        </div>
+        <div>
+          <label class="lbl-small">اسم المركز</label>
+          <input id="center" class="inp" placeholder="اسم المركز" />
+        </div>
+      </div>
+      <label class="lbl-small mt5">الأسماء (كل اسم بسطر)</label>
+      <textarea id="members" class="inp" rows="5" placeholder="محمد
+خالد
+عبدالعزيز"></textarea>
+      <div class="row">
+        <button class="chip" onclick="sendHonor()">حفظ إلى التبويب</button>
+      </div>
+
+      <div class="subtle">آخر السجلات</div>
+      <div id="honList" class="mini"></div>
+    </section>
+
+    <section id="tab-links" class="card tab-pane hidden">
+      <div id="linksTable" class="table"></div>
+      <div class="row">
+        <input id="newLinkName" class="inp" placeholder="اسم الرابط (مثال: جدول القطاع)" />
+        <input id="newLinkUrl" class="inp" placeholder="https://..." />
+        <button class="chip" onclick="addLink()">إضافة رابط</button>
+      </div>
+    </section>
+
+    <section id="tab-theme" class="card tab-pane hidden">
+      <div class="grid2">
+        <div><label class="lbl-small">اللون الأساسي</label><input id="colorPrimary" class="inp" type="color" value="#0044ff" /></div>
+        <div><label class="lbl-small">اللون الثانوي</label><input id="colorSecondary" class="inp" type="color" value="#c0c7d6" /></div>
+      </div>
+
+      <div class="grid2 mt5">
+        <div>
+          <label class="lbl-small">الخلفية</label>
+          <select id="bgMode" class="inp">
+            <option value="static">ثابتة (افتراضي)</option>
+            <option value="gradient">متدرجة</option>
+            <option value="waves">تموجية</option>
+            <option value="glow">ضوء متوهّج</option>
+            <option value="image">صورة مخصصة</option>
+          </select>
+        </div>
+        <div><label class="lbl-small">رابط صورة الخلفية (اختياري)</label><input id="bgImage" class="inp" placeholder="https://... (عند اختيار صورة)" /></div>
+      </div>
+
+      <div class="row mt5">
+        <button class="chip" onclick="saveTheme()">حفظ المظهر للجميع</button>
+        <button class="chip" onclick="resetTheme()">استعادة المظهر الافتراضي</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer subtle">منصة قطاع عمليات وسط الرياض</footer>
+
+  <div id="toast" class="toast">تم</div>
+  <script src="script.js"></script>
+</body>
+</html>

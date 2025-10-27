@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تهيئة المنصة</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body id="setup">
+  <main class="wrap setup-box">
+    <h1 class="brand3d">تهيئة منصة قطاع عمليات وسط الرياض</h1>
+    <p class="meta">هذه الخطوة تظهر مرة واحدة فقط لإعداد المنصة.</p>
+    <div class="card">
+      <label class="lbl-small">رابط Google Apps Script (يبدأ بـ googleusercontent)</label>
+      <input id="suScript" class="inp" placeholder="https://script.googleusercontent.com/..." />
+
+      <label class="lbl-small">كلمة مرور لوحة التحكم</label>
+      <input id="suPass" class="inp" placeholder="admin3838771" />
+
+      <label class="lbl-small">اللون الأساسي</label>
+      <input id="suPrimary" type="color" class="inp" value="#0044ff" />
+
+      <div class="row">
+        <button class="chip" onclick="previewSetup()">معاينة</button>
+        <button class="chip" onclick="saveSetup()">حفظ الإعدادات</button>
+      </div>
+      <div class="meta small">يمكنك تعديل هذه الإعدادات لاحقًا من لوحة التحكم.</div>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>قطاع عمليات وسط الرياض</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body id="home">
+  <div id="loader"><div class="orb"></div></div>
+
+  <div class="topbar">
+    <a class="brand3d shine" href="./">قطاع عمليات وسط الرياض</a>
+    <div class="grow"></div>
+    <button id="themeBtn" class="mode" title="تبديل النمط">🌙</button>
+    <a class="chip" href="admin.html">لوحة التحكم</a>
+  </div>
+
+  <main class="wrap">
+    <section id="honorSec" class="card section hidden reveal">
+      <div class="row between center">
+        <h3 class="sec-title">لوحات الشرف</h3>
+        <div id="honorMeta" class="meta small"></div>
+      </div>
+      <div id="honorTabs" class="honor-tabs"></div>
+      <div class="honor-rail" id="honRail"></div>
+    </section>
+
+    <section class="section reveal">
+      <div class="grid">
+        <a class="btn" id="lnk-table" target="_blank"><div class="orb-btn"><span class="ico">📋</span></div><div class="lbl">جدول القطاع</div></a>
+        <a class="btn" id="lnk-vac" target="_blank"><div class="orb-btn"><span class="ico">🌴</span></div><div class="lbl">حجز الإجازات</div></a>
+        <a class="btn" id="lnk-check" target="_blank"><div class="orb-btn"><span class="ico">✅</span></div><div class="lbl">التشييك اليومي</div></a>
+        <a class="btn" id="lnk-swap" target="_blank"><div class="orb-btn"><span class="ico">🔄</span></div><div class="lbl">تبديل المناوبات</div></a>
+        <a class="btn" id="lnk-ads" target="_blank"><div class="orb-btn"><span class="ico">📣</span></div><div class="lbl">الإعلانات</div></a>
+        <a class="btn" id="lnk-sugg" target="_blank"><div class="orb-btn"><span class="ico">💡</span></div><div class="lbl">الاقتراحات</div></a>
+      </div>
+    </section>
+
+    <section id="annSec" class="card section hidden reveal">
+      <h3 class="sec-title">الإعلانات</h3>
+      <div id="annList" class="ann-list"></div>
+    </section>
+  </main>
+
+  <footer class="footer subtle">منصة قطاع عمليات وسط الرياض</footer>
+
+  <div id="toast" class="toast">تم</div>
+  <script src="script.js"></script>
+</body>
+</html>
