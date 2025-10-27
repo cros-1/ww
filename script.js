@@ -28,7 +28,7 @@ function saveSetup() {
 
 function previewSetup() {
   const color = document.getElementById("suPrimary").value;
-  document.body.style.background = color + "22"; // خلفية بلون فاتح من اللون الأساسي
+  document.body.style.background = color + "22"; // خلفية فاتحة من اللون الأساسي
   alert("🎨 تمت المعاينة بنجاح، اللون الأساسي: " + color);
 }
 
@@ -58,7 +58,7 @@ function checkLogin() {
 }
 
 /* =====================================
-   دالة جلب البيانات من Google Apps Script
+   جلب البيانات من Google Apps Script
 ===================================== */
 async function fetchData(type) {
   const scriptURL = localStorage.getItem("scriptURL");
@@ -79,7 +79,7 @@ async function fetchData(type) {
 }
 
 /* =====================================
-   دالة إرسال البيانات إلى Google Sheet
+   إرسال البيانات إلى Google Sheet
 ===================================== */
 async function postData(type, payload) {
   const scriptURL = localStorage.getItem("scriptURL");
@@ -96,6 +96,7 @@ async function postData(type, payload) {
     });
 
     const result = await res.json();
+
     if (result.status === "success") {
       alert("✅ تم حفظ البيانات بنجاح");
       return true;
