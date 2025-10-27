@@ -4,80 +4,97 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تهيئة المنصة</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #f5f6fa;
+      color: #222;
+      direction: rtl;
+      text-align: center;
+      margin: 0;
+      padding: 40px;
+    }
+    .card {
+      display: inline-block;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: right;
+      max-width: 400px;
+      width: 100%;
+    }
+    input {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 15px;
+      border: none;
+      border-radius: 6px;
+      background: royalblue;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { opacity: 0.85; }
+  </style>
 </head>
-<body id="setup">
-  <main class="wrap setup-box">
-    <h1 class="brand3d">تهيئة منصة قطاع عمليات وسط الرياض</h1>
-    <p class="meta">هذه الخطوة تظهر مرة واحدة فقط لإعداد المنصة.</p>
-    <div class="card">
-      <label class="lbl-small">رابط Google Apps Script (يبدأ بـ googleusercontent)</label>
-      <input id="suScript" class="inp" placeholder="https://script.googleusercontent.com/..." />
+<body>
+  <h1>⚙️ تهيئة منصة قطاع عمليات وسط الرياض</h1>
+  <p>الرجاء إدخال بيانات الإعداد.</p>
 
-      <label class="lbl-small">كلمة مرور لوحة التحكم</label>
-      <input id="suPass" class="inp" placeholder="admin3838771" />
+  <div class="card">
+    <label>🔗 رابط Google Apps Script</label>
+    <input id="suScript" placeholder="https://script.googleusercontent.com/...">
 
-      <label class="lbl-small">اللون الأساسي</label>
-      <input id="suPrimary" type="color" class="inp" value="#0044ff" />
+    <label>🔒 كلمة مرور لوحة التحكم</label>
+    <input id="suPass" placeholder="admin3838771">
 
-      <div class="row">
-        <button class="chip" onclick="previewSetup()">معاينة</button>
-        <button class="chip" onclick="saveSetup()">حفظ الإعدادات</button>
-      </div>
-      <div class="meta small">يمكنك تعديل هذه الإعدادات لاحقًا من لوحة التحكم.</div>
+    <label>🎨 اللون الأساسي</label>
+    <input id="suPrimary" type="color" value="#0044ff">
+
+    <div>
+      <button onclick="previewSetup()">معاينة</button>
+      <button onclick="saveSetup()">حفظ الإعدادات</button>
     </div>
-  </main>
+  </div>
 
-  <!-- سكربت داخلي نظيف يعرّف الدوال مباشرة ويمنع أي أخطاء -->
   <script>
-  'use strict';
-  // تأكيد تحميل السكربت
-  console.log('✅ inline setup script loaded');
+  console.log("✅ setup inline JS loaded");
 
-  // زر المعاينة
   function previewSetup() {
-    const color = (document.getElementById('suPrimary') || {}).value || '#0044ff';
-    // تأثير بسيط يؤكد التغيير
-    document.body.style.boxShadow = 'inset 0 0 0 6px ' + color + '55';
-    alert('🎨 تمت المعاينة – اللون الأساسي: ' + color);
+    const color = document.getElementById("suPrimary").value || "#0044ff";
+    document.body.style.background = color + "22";
+    alert("🎨 تمت المعاينة – اللون: " + color);
   }
 
-  // زر الحفظ
   function saveSetup() {
-    const scriptURL = (document.getElementById('suScript') || {}).value.trim();
-    const adminPass = (document.getElementById('suPass') || {}).value.trim();
-    const primaryColor = (document.getElementById('suPrimary') || {}).value || '#0044ff';
+    const scriptURL = document.getElementById("suScript").value.trim();
+    const adminPass = document.getElementById("suPass").value.trim();
+    const primaryColor = document.getElementById("suPrimary").value;
 
-    if (!scriptURL || !scriptURL.startsWith('https://script.googleusercontent.com/')) {
-      alert('⚠️ تأكد أن الرابط يبدأ بـ https://script.googleusercontent.com/');
+    if (!scriptURL.startsWith("https://script.googleusercontent.com/")) {
+      alert("⚠️ تأكد أن الرابط يبدأ بـ https://script.googleusercontent.com/");
       return;
     }
     if (!adminPass) {
-      alert('⚠️ الرجاء إدخال كلمة مرور للوحة التحكم');
+      alert("⚠️ أدخل كلمة المرور");
       return;
     }
 
-    try {
-      localStorage.setItem('scriptURL', scriptURL);
-      localStorage.setItem('adminPass', adminPass);
-      localStorage.setItem('primaryColor', primaryColor);
-      console.log('💾 saved:', { scriptURL, adminPass, primaryColor });
-      alert('✅ تم حفظ الإعدادات بنجاح! يمكنك الآن العودة للصفحة الرئيسية.');
-    } catch (e) {
-      console.error('localStorage error:', e);
-      alert('❌ تعذّر الحفظ في المتصفح (localStorage). جرّب من متصفح آخر.');
-    }
-  }
+    localStorage.setItem("scriptURL", scriptURL);
+    localStorage.setItem("adminPass", adminPass);
+    localStorage.setItem("primaryColor", primaryColor);
 
-  // عند التحميل: طبّق اللون لو كان محفوظ
-  (function applySavedTheme(){
-    try {
-      const color = localStorage.getItem('primaryColor');
-      if (color) {
-        document.documentElement.style.setProperty('--primary', color);
-      }
-    } catch (_) {}
-  })();
+    alert("✅ تم حفظ الإعدادات بنجاح!\nيمكنك الآن العودة للصفحة الرئيسية.");
+    console.log({ scriptURL, adminPass, primaryColor });
+  }
   </script>
 </body>
 </html>
