@@ -27,6 +27,57 @@
       <div class="meta small">يمكنك تعديل هذه الإعدادات لاحقًا من لوحة التحكم.</div>
     </div>
   </main>
-  <script src="script.js?v=3"></script>
+
+  <!-- سكربت داخلي نظيف يعرّف الدوال مباشرة ويمنع أي أخطاء -->
+  <script>
+  'use strict';
+  // تأكيد تحميل السكربت
+  console.log('✅ inline setup script loaded');
+
+  // زر المعاينة
+  function previewSetup() {
+    const color = (document.getElementById('suPrimary') || {}).value || '#0044ff';
+    // تأثير بسيط يؤكد التغيير
+    document.body.style.boxShadow = 'inset 0 0 0 6px ' + color + '55';
+    alert('🎨 تمت المعاينة – اللون الأساسي: ' + color);
+  }
+
+  // زر الحفظ
+  function saveSetup() {
+    const scriptURL = (document.getElementById('suScript') || {}).value.trim();
+    const adminPass = (document.getElementById('suPass') || {}).value.trim();
+    const primaryColor = (document.getElementById('suPrimary') || {}).value || '#0044ff';
+
+    if (!scriptURL || !scriptURL.startsWith('https://script.googleusercontent.com/')) {
+      alert('⚠️ تأكد أن الرابط يبدأ بـ https://script.googleusercontent.com/');
+      return;
+    }
+    if (!adminPass) {
+      alert('⚠️ الرجاء إدخال كلمة مرور للوحة التحكم');
+      return;
+    }
+
+    try {
+      localStorage.setItem('scriptURL', scriptURL);
+      localStorage.setItem('adminPass', adminPass);
+      localStorage.setItem('primaryColor', primaryColor);
+      console.log('💾 saved:', { scriptURL, adminPass, primaryColor });
+      alert('✅ تم حفظ الإعدادات بنجاح! يمكنك الآن العودة للصفحة الرئيسية.');
+    } catch (e) {
+      console.error('localStorage error:', e);
+      alert('❌ تعذّر الحفظ في المتصفح (localStorage). جرّب من متصفح آخر.');
+    }
+  }
+
+  // عند التحميل: طبّق اللون لو كان محفوظ
+  (function applySavedTheme(){
+    try {
+      const color = localStorage.getItem('primaryColor');
+      if (color) {
+        document.documentElement.style.setProperty('--primary', color);
+      }
+    } catch (_) {}
+  })();
+  </script>
 </body>
 </html>
