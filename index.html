@@ -144,6 +144,145 @@
 
   // تحميل البيانات عند فتح الصفحة
   window.addEventListener("DOMContentLoaded", loadData);
-  </script>
+<script>
+console.log("✅ index page loaded");
+
+// تطبيق اللون المحفوظ من setup.html
+(function applySavedTheme() {
+  const c = localStorage.getItem("primaryColor");
+  if (c) document.documentElement.style.setProperty("--primary", c);
+})();
+
+// تبديل الصفحات
+async function openPage(page) {
+  const area = document.getElementById("pageContent");
+
+  if (page === "dashboard") {
+    area.innerHTML = `<h2>🏠 الصفحة الرئيسية</h2>
+    <p>مرحبًا بكم في المنصة، يمكنك التصفح من الأزرار أعلاه.</p>`;
+  }
+
+  else if (page === "honor") {
+    area.innerHTML = ⁠ <h2>🏆 لوحة الشرف</h2><p>⏳ يتم جلب البيانات...</p> ⁠;
+    const data = await fetchData("honor");
+    if (!data || data.length === 0) {
+      area.innerHTML = ⁠ <h2>🏆 لوحة الشرف</h2><p>لا توجد بيانات حالياً.</p> ⁠;
+    } else {
+      let cards = data.map(
+        (x) => `
+        <div class="card" style="border:1px solid var(--primary);padding:10px;border-radius:10px;margin:10px;">
+          <h3>🥇 ${x.title || "بدون عنوان"}</h3>
+          <p>${x.desc || ""}</p>
+        </div>`
+      ).join("");
+      area.innerHTML = ⁠ <h2>🏆 لوحة الشرف</h2>${cards} ⁠;
+    }
+  }
+
+  else if (page === "ads") {
+    area.innerHTML = ⁠ <h2>📢 الإعلانات</h2><p>⏳ يتم جلب البيانات...</p> ⁠;
+    const data = await fetchData("ads");
+    if (!data || data.length === 0) {
+      area.innerHTML = ⁠ <h2>📢 الإعلانات</h2><p>لا توجد إعلانات حالياً.</p> ⁠;
+    } else {
+      let ads = data.map(
+        (a) => `
+        <div class="card" style="background:#fff;padding:15px;margin:10px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1)">
+          <h3>🗓️ ${a.title || "إعلان جديد"}</h3>
+          <p>${a.desc || ""}</p>
+        </div>`
+      ).join("");
+      area.innerHTML = ⁠ <h2>📢 الإعلانات</h2>${ads} ⁠;
+    }
+  }
+}
+
+// جلب البيانات من Google Apps Script
+async function fetchData(type) {
+  const scriptURL = localStorage.getItem("scriptURL");
+  if (!scriptURL) {
+    console.warn("⚠️ لم يتم إعداد Google Script بعد");
+    return [];
+  }
+  try {
+    const res = await fetch(⁠ ${scriptURL}?mode=read&type=${type} ⁠);
+    if (!res.ok) throw new Error("فشل الاتصال بالسكربت");
+    const data = await res.json();
+    console.log("📥 بيانات من Google:", data);
+    return data;
+  } catch (err) {
+    console.error("❌ خطأ أثناء الجلب:", err);
+    return [];
+  }
+}
+
+// لوحة التحكم
+function openAdmin() {
+  const pass = prompt("أدخل كلمة مرور لوحة التحكم:");
+  const saved = localStorage.getItem("adminPass");
+  if (pass === saved) {
+    alert("✅ تم تسجيل الدخول");
+    showAdminPanel();
+  } else {
+    alert("❌ كلمة المرور غير صحيحة");
+  }
+}
+
+// عرض لوحة التحكم
+function showAdminPanel() {
+  const area = document.getElementById("pageContent");
+  area.innerHTML = `
+  <h2>⚙️ لوحة التحكم</h2>
+  <div class="card" style="text-align:right;max-width:600px;margin:auto;">
+    <label>🟦 نوع البيانات</label>
+    <select id="dataType" class="inp">
+      <option value="ads">إعلان جديد</option>
+      <option value="honor">لوحة شرف</option>
+    </select>
+    <label>📌 العنوان</label>
+    <input id="dataTitle" class="inp" placeholder="العنوان..." />
+    <label>📝 التفاصيل</label>
+    <textarea id="dataDesc" class="inp" placeholder="التفاصيل..." rows="3"></textarea>
+    <button class="chip" onclick="sendData()">💾 حفظ</button>
+    <hr>
+    <button class="chip danger" onclick="clearAll()">🧹 إعادة ضبط الإعدادات</button>
+  </div>`;
+}
+
+// إرسال البيانات إلى Google Sheet
+async function sendData() {
+  const scriptURL = localStorage.getItem("scriptURL");
+  const type = document.getElementById("dataType").value;
+  const title = document.getElementById("dataTitle").value;
+  const desc = document.getElementById("dataDesc").value;
+
+  if (!scriptURL || !title) {
+    alert("⚠️ تأكد من إعداد الرابط والعنوان");
+    return;
+  }
+
+  try {
+    const res = await fetch(scriptURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode: "write", type, data: { title, desc } }),
+    });
+    const result = await res.json();
+    if (result.status === "success") alert("✅ تم حفظ البيانات بنجاح");
+    else alert("❌ فشل الحفظ");
+  } catch (err) {
+    console.error("❌ خطأ أثناء الإرسال:", err);
+    alert("⚠️ تحقق من رابط السكربت أو الصلاحيات");
+  }
+}
+
+// إعادة ضبط الإعدادات
+function clearAll() {
+  if (confirm("هل أنت متأكد من مسح الإعدادات؟")) {
+    localStorage.clear();
+    alert("✅ تم المسح بنجاح. أعد تحميل الصفحة.");
+  }
+}
+</script>
 </body>
 </html>
