@@ -67,16 +67,14 @@ async function fetchData(type) {
     return [];
   }
 
-  try {
-    // ✅ تم تصحيح الخطأ هنا
-    const res = await fetch(`${scriptURL}?mode=read&type=${type}`);
-    if (!res.ok) throw new Error("فشل الاتصال بالسكربت");
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.error("حدث خطأ أثناء الجلب:", err);
-    return [];
-  }
+ try {
+  const res = await fetch(`${scriptURL}?mode=read&type=${type}`);
+  if (!res.ok) throw new Error("فشل الاتصال بالسكربت");
+  const data = await res.json();
+  return data;
+} catch (err) {
+  console.error("حدث خطأ أثناء الجلب:", err);
+  return [];
 }
 
 /* =====================================
