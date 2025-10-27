@@ -67,14 +67,15 @@ async function fetchData(type) {
     return [];
   }
 
- try {
-  const res = await fetch(`${scriptURL}?mode=read&type=${type}`);
-  if (!res.ok) throw new Error("فشل الاتصال بالسكربت");
-  const data = await res.json();
-  return data;
-} catch (err) {
-  console.error("حدث خطأ أثناء الجلب:", err);
-  return [];
+  try {
+    const res = await fetch(⁠ ${scriptURL}?mode=read&type=${type} ⁠);
+    if (!res.ok) throw new Error("فشل الاتصال بالسكربت");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("حدث خطأ أثناء الجلب:", err);
+    return [];
+  }
 }
 
 /* =====================================
@@ -93,6 +94,7 @@ async function postData(type, payload) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mode: "write", type, data: payload })
     });
+
     const result = await res.json();
     if (result.status === "success") {
       alert("✅ تم حفظ البيانات بنجاح");
