@@ -1,4 +1,5 @@
 console.log("✅ script.js loaded");
+
 /* =====================================
    إعداد المنصة – setup.html
 ===================================== */
@@ -67,7 +68,8 @@ async function fetchData(type) {
   }
 
   try {
-    const res = await fetch(⁠ ${scriptURL}?mode=read&type=${type} ⁠);
+    // ✅ تم تصحيح الخطأ هنا
+    const res = await fetch(`${scriptURL}?mode=read&type=${type}`);
     if (!res.ok) throw new Error("فشل الاتصال بالسكربت");
     const data = await res.json();
     return data;
